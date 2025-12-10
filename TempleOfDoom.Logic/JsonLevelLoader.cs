@@ -53,6 +53,47 @@ namespace TempleOfDoom.Logic
                 level.Rooms.Add(room);
             }
 
+            if (levelDto.connections != null)
+            {
+                foreach (var connection in levelDto.connections)
+                {
+                    if (connection.portal != null && connection.portal.Length == 2)
+                    {
+                        var portal1 = connection.portal[0];
+                        var portal2 = connection.portal[1];
+
+                       
+                        PortalTile tile1 = new PortalTile
+                        {
+                            TargetRoomId = portal2.roomId,
+                            TargetX = portal2.x,
+                            TargetY = portal2.y
+                        };
+
+
+                        PortalTile tile2 = new PortalTile
+                        {
+                            TargetRoomId = portal1.roomId,
+                            TargetX = portal1.x,
+                            TargetY = portal1.y
+                        };
+
+                    
+                        Room room1 = level.Rooms.Find(r => r.Id == portal1.roomId);
+                        if (room1 != null)
+                        {
+                            room1.SetTile(portal1.x, portal1.y, tile1);
+                        }
+
+                        Room room2 = level.Rooms.Find(r => r.Id == portal2.roomId);
+                        if (room2 != null)
+                        {
+                            room2.SetTile(portal2.x, portal2.y, tile2);
+                        }
+                    }
+                }
+            }
+
             return level;
         }
     }
