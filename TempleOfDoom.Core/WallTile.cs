@@ -13,7 +13,7 @@ namespace TempleOfDoom.Core
             return false;
         }
 
-        public override char GetSprite()
+        protected override char GetBaseSprite()
         {
             return '#';
         }
