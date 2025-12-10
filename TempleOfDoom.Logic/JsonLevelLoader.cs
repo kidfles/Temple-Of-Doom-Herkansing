@@ -2,6 +2,7 @@ using System.IO;
 using System.Text.Json;
 using TempleOfDoom.Core;
 using TempleOfDoom.Core.DTOs;
+using TempleOfDoom.Core.Items;
 
 namespace TempleOfDoom.Logic
 {
@@ -50,6 +51,42 @@ namespace TempleOfDoom.Logic
                             }
                         }
                         room.SetTile(specialTile.x, specialTile.y, tile);
+                    }
+                }
+
+                        room.SetTile(specialTile.x, specialTile.y, tile);
+                    }
+                }
+
+                if (roomDto.items != null)
+                {
+                    foreach (var itemDto in roomDto.items)
+                    {
+                        Item item = null;
+                        switch (itemDto.type.ToLower())
+                        {
+                            case "sankara stone":
+                                item = new SankaraStone();
+                                break;
+                            case "key":
+                                item = new Key { Color = itemDto.color };
+                                break;
+                            case "boobytrap":
+                                item = new BoobyTrap { Damage = itemDto.damage };
+                                break;
+                            case "disappearing boobytrap":
+                                item = new DisappearingBoobyTrap { Damage = itemDto.damage };
+                                break;
+                        }
+
+                        if (item != null)
+                        {
+                            var tile = room.GetTile(itemDto.x, itemDto.y);
+                            if (tile is Tile concreteTile) // Room.GetTile returns IGameObject, need cast to Tile to set CurrentItem
+                            {
+                                concreteTile.CurrentItem = item;
+                            }
+                        }
                     }
                 }
 
