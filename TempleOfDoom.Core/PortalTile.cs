@@ -14,7 +14,7 @@ namespace TempleOfDoom.Core
             player.CurrentRoomId = TargetRoomId;
         }
 
-        public override bool IsWalkable()
+        public override bool IsWalkable(Player player)
         {
             return true;
         }

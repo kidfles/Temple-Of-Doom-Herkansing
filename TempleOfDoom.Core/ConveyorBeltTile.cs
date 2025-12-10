@@ -24,7 +24,7 @@ namespace TempleOfDoom.Core
             }
         }
 
-        public override bool IsWalkable()
+        public override bool IsWalkable(Player player)
         {
             return true; 
         }

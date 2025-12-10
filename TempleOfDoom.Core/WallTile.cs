@@ -8,7 +8,7 @@ namespace TempleOfDoom.Core
             // Wall interactions (e.g. bumping into it)
         }
 
-        public override bool IsWalkable()
+        public override bool IsWalkable(Player player)
         {
             return false;
         }
