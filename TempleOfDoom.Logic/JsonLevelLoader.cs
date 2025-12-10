@@ -122,7 +122,7 @@ namespace TempleOfDoom.Logic
                         }
                     }
 
-                    if (connection.Doors != null && connection.Doors.Length > 0)
+                    if (connection.Doors != null)
                     {
                         // Create shared door logic
                         IDoor sharedDoorLogic = tileFactory.CreateDoorLogic(connection.Doors);
