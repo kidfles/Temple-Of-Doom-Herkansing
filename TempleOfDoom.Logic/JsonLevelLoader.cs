@@ -179,6 +179,21 @@ namespace TempleOfDoom.Logic
                 }
             }
 
+                }
+            }
+
+            if (levelDto.player != null)
+            {
+                level.Player = new Player
+                {
+                    X = levelDto.player.startX,
+                    Y = levelDto.player.startY,
+                    CurrentRoomId = levelDto.player.startRoomId,
+                };
+                
+                level.CurrentRoom = level.Rooms.Find(r => r.Id == level.Player.CurrentRoomId);
+            }
+
             return level;
         }
     }
