@@ -1,5 +1,7 @@
 using System;
 using TempleOfDoom.Core;
+using TempleOfDoom.Core.DTOs;
+using TempleOfDoom.Core.Doors;
 
 namespace TempleOfDoom.Logic
 {

@@ -7,6 +7,7 @@ namespace TempleOfDoom.Core
 
         public override void Interact(Player player)
         {
+            base.Interact(player);
             switch (Direction)
             {
                 case Direction.NORTH:

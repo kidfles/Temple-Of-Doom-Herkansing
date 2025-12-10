@@ -9,6 +9,7 @@ namespace TempleOfDoom.Core
 
         public override void Interact(Player player)
         {
+            base.Interact(player);
             player.X = TargetX;
             player.Y = TargetY;
             player.CurrentRoomId = TargetRoomId;

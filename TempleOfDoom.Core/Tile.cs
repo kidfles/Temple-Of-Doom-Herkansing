@@ -6,7 +6,14 @@ namespace TempleOfDoom.Core
     {
         public Item CurrentItem { get; set; }
 
-        public abstract void Interact(Player player);
+        public virtual void Interact(Player player)
+        {
+            if (CurrentItem != null)
+            {
+                CurrentItem.Interact(player);
+                CurrentItem = null; // Remove item after interaction (e.g. pickup)
+            }
+        }
         public virtual bool IsWalkable(Player player)
         {
              return true; 
