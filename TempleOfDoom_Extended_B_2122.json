@@ -9,31 +9,8 @@
 		{
 			"id": 2,
 			"type": "room",
-			"width": 7,
-			"height": 5,
-			"items": [
-				{
-					"type": "pressure plate",
-					"x": 1,
-					"y": 2
-				},
-				{
-					"type": "pressure plate",
-					"x": 5,
-					"y": 2
-				}
-			],
-			"enemies": [
-				{
-					"type": "horizontal",
-					"x": 4,
-					"y": 2,
-					"minX": 1,
-					"minY": 2,
-					"maxX": 5,
-					"maxY": 2
-				}
-			]
+			"width": 3,
+			"height": 3
 		},
 		{
 			"id": 3,
@@ -59,6 +36,20 @@
 			"type": "room",
 			"width": 11,
 			"height": 7,
+			"specialFloorTiles":[
+				{
+					"type": "conveyor belt",
+					"direction": "EAST",
+					"x": 8,
+					"y": 1
+				},
+				{
+					"type": "conveyor belt",
+					"direction": "WEST",
+					"x": 9,
+					"y": 5
+				}
+			],
 			"items": [
 				{
 					"type": "key",
@@ -68,49 +59,44 @@
 				},
 				{
 					"type": "sankara stone",
-					"x": 9,
-					"y": 1
-				},
-				{
-					"type": "boobytrap",
-					"damage": 1,
-					"x": 4,
-					"y": 2
-				},
-				{
-					"type": "boobytrap",
-					"damage": 1,
-					"x": 5,
-					"y": 2
-				},
-				{
-					"type": "boobytrap",
-					"damage": 1,
-					"x": 6,
-					"y": 2
-				},
-				{
-					"type": "boobytrap",
-					"damage": 1,
-					"x": 4,
-					"y": 4
-				},
-				{
-					"type": "boobytrap",
-					"damage": 1,
-					"x": 5,
-					"y": 4
-				},
-				{
-					"type": "boobytrap",
-					"damage": 1,
-					"x": 6,
-					"y": 4
-				},
-				{
-					"type": "pressure plate",
 					"x": 5,
 					"y": 3
+				},
+				{
+					"type": "boobytrap",
+					"damage": 1,
+					"x": 4,
+					"y": 2
+				},
+				{
+					"type": "boobytrap",
+					"damage": 1,
+					"x": 5,
+					"y": 2
+				},
+				{
+					"type": "boobytrap",
+					"damage": 1,
+					"x": 6,
+					"y": 2
+				},
+				{
+					"type": "boobytrap",
+					"damage": 1,
+					"x": 4,
+					"y": 4
+				},
+				{
+					"type": "boobytrap",
+					"damage": 1,
+					"x": 5,
+					"y": 4
+				},
+				{
+					"type": "boobytrap",
+					"damage": 1,
+					"x": 6,
+					"y": 4
 				}
 			],
 			"enemies": [
@@ -122,32 +108,55 @@
 					"minY": 5,
 					"maxX": 7,
 					"maxY": 5
-				}
-			],
-			"specialFloorTiles": [
-				{
-				   "type": "wall",
-				   "x": 8,
-				   "y": 1
 				},
 				{
-					"type": "wall",
-					"x": 8,
-					"y": 2
-				},
-				{
-					"type": "innerdoor",
+					"type": "vertical",
 					"x": 9,
-					"y": 2
+					"y": 1,
+					"minX": 8,
+					"minY": 1,
+					"maxX": 9,
+					"maxY": 5
 				}
-			 ]
-		  
+			]
 		},
 		{
 			"id": 5,
 			"type": "room",
 			"width": 5,
 			"height": 5,
+			"specialFloorTiles":[
+				{
+					"type": "conveyor belt",
+					"direction": "EAST",
+					"x": 1,
+					"y": 1
+				},
+				{
+					"type": "conveyor belt",
+					"direction": "EAST",
+					"x": 2,
+					"y": 1
+				},
+				{
+					"type": "conveyor belt",
+					"direction": "SOUTH",
+					"x": 3,
+					"y": 1
+				},
+				{
+					"type": "conveyor belt",
+					"direction": "SOUTH",
+					"x": 3,
+					"y": 2
+				},
+				{
+					"type": "conveyor belt",
+					"direction": "WEST",
+					"x": 3,
+					"y": 3
+				}
+			],
 			"items": [
 				{
 					"type": "key",
@@ -230,43 +239,35 @@
 		{
 			"NORTH": 1,
 			"SOUTH": 2,
-			"horizontal": true,
 			"doors": []
 		},
 		{
 			"NORTH": 2,
 			"SOUTH": 3,
-			"horizontal": true,
-			"doors": [
-				{
-					"type": "switched"
-				}
-			]
+			"doors": []
 		},
 		{
 			"WEST": 1,
 			"EAST": 4,
-			"horizontal": false,
 			"doors": []
 		},
 		{
 			"NORTH": 4,
 			"SOUTH": 5,
-			"horizontal": true,
 			"doors": [
 				{
 					"type": "colored",
 					"color": "green"
 				},
 				{
-					"type": "open on odd"
+					"type": "open on stones in room",
+					"no_of_stones": 0
 				}
 			]
 		},
 		{
 			"WEST": 4,
 			"EAST": 7,
-			"horizontal": false,
 			"doors": [
 				{
 					"type": "colored",
@@ -280,7 +281,6 @@
 		{
 			"NORTH": 6,
 			"SOUTH": 7,
-			"horizontal": true,
 			"doors": [
 				{
 					"type": "toggle"
@@ -290,7 +290,6 @@
 		{
 			"NORTH": 7,
 			"SOUTH": 8,
-			"horizontal": true,
 			"doors": [
 				{
 					"type": "toggle"
@@ -303,7 +302,6 @@
 		{
 			"NORTH": 8,
 			"SOUTH": 9,
-			"horizontal": true,
 			"doors": [
 				{
 					"type": "closing gate"
@@ -311,17 +309,15 @@
 			]
 		},
 		{
-			"within": 4,
-			"horizontal": true,
-			"doors": [
-				{
-					"type": "colored",
-					"color": "red"
-				},
-				{
-					"type": "toggle"
-				}
-			]
+			"portal": [{
+				"roomId": 9,
+				"x": 3,
+				"y": 2
+			},{
+				"roomId": 3,
+				"x": 1,
+				"y": 3
+			}]
 		}
 	],
 	"player": {
