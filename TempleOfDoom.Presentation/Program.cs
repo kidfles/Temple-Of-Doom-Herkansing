@@ -13,17 +13,22 @@ namespace TempleOfDoom
             string levelFile = "TempleOfDoom_Extended_B_2122.json";
             
             // Validate file existence
+            // Validate file existence
             if (!File.Exists(levelFile))
             {
-                if (File.Exists("../../../" + levelFile))
-                {
-                    levelFile = "../../../" + levelFile;
-                }
-                else
-                {
-                    Console.WriteLine("Level file not found!");
+                 // Try looking in the application base directory as a fallback
+                 string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+                 string localPath = Path.Combine(baseDir, levelFile);
+                 
+                 if (File.Exists(localPath))
+                 {
+                     levelFile = localPath;
+                 }
+                 else
+                 {
+                    Console.WriteLine($"Level file not found: {levelFile}");
                     return;
-                }
+                 }
             }
 
             JsonLevelLoader loader = new JsonLevelLoader();
