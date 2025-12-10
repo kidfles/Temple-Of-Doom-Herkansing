@@ -5,9 +5,10 @@ namespace TempleOfDoom.Core.Items
     {
         public string Color { get; set; }
 
-        public override void Interact(Player player)
+        public override bool Interact(Player player)
         {
             // Pickup logic komt nog
+            return true;
         }
 
         public override char GetSprite()

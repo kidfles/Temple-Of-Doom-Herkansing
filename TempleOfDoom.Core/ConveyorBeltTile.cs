@@ -5,9 +5,9 @@ namespace TempleOfDoom.Core
     {
         public Direction Direction { get; set; }
 
-        public override void Interact(Player player)
+        public override bool Interact(Player player)
         {
-            base.Interact(player);
+            return base.Interact(player);
         }
 
         public override bool IsWalkable(Player player)

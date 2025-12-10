@@ -15,7 +15,7 @@ namespace TempleOfDoom.Core
             _doorLogic = doorLogic;
         }
 
-        public override void Interact(Player player)
+        public override bool Interact(Player player)
         {
             base.Interact(player);
             _doorLogic.Interact(player);
@@ -25,6 +25,7 @@ namespace TempleOfDoom.Core
                  player.X = TargetX;
                  player.Y = TargetY;
              }
+             return false;
         }
 
         public override bool IsWalkable(Player player)

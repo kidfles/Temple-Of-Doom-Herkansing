@@ -5,9 +5,10 @@ namespace TempleOfDoom.Core.Items
     {
         public int Damage { get; set; }
 
-        public override void Interact(Player player)
+        public override bool Interact(Player player)
         {
             // Damage logic maar nog zonder de logic
+            return false;
         }
 
         public override char GetSprite()

@@ -1,0 +1,11 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+C:\Users\kidfl\source\Code Design Herkansing\Temple-Of-Doom-Herkansing\TempleOfDoom.Core\WallTile.cs(6,30): error CS0508: 'WallTile.Interact(Player)': return type must be 'bool' to match overridden member 'Tile.Interact(Player)' [C:\Users\kidfl\source\Code Design Herkansing\Temple-Of-Doom-Herkansing\TempleOfDoom.Core\TempleOfDoom.Core.csproj]
+
+Build FAILED.
+
+C:\Users\kidfl\source\Code Design Herkansing\Temple-Of-Doom-Herkansing\TempleOfDoom.Core\WallTile.cs(6,30): error CS0508: 'WallTile.Interact(Player)': return type must be 'bool' to match overridden member 'Tile.Interact(Player)' [C:\Users\kidfl\source\Code Design Herkansing\Temple-Of-Doom-Herkansing\TempleOfDoom.Core\TempleOfDoom.Core.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:01.29

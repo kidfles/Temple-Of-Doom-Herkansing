@@ -7,12 +7,13 @@ namespace TempleOfDoom.Core
         public int TargetX { get; set; }
         public int TargetY { get; set; }
 
-        public override void Interact(Player player)
+        public override bool Interact(Player player)
         {
             base.Interact(player);
             player.X = TargetX;
             player.Y = TargetY;
             player.CurrentRoomId = TargetRoomId;
+            return false;
         }
 
         public override bool IsWalkable(Player player)
