@@ -11,15 +11,16 @@ namespace TempleOfDoom.Logic
         {
             switch (type.ToLower())
             {
-                case "floor":
+                case TileTypes.Floor:
                     return new FloorTile();
-                case "wall":
+                case TileTypes.Wall:
                     return new WallTile();
-                case "conveyor belt":
+                case TileTypes.ConveyorBelt:
                     return new ConveyorBeltTile();
                 default:
                     throw new ArgumentException($"Unknown tile type: {type}");
                 }
+        }
 
         public IDoor CreateDoorLogic(DoorDto[] doorDtos)
         {
@@ -28,15 +29,15 @@ namespace TempleOfDoom.Logic
             {
                 foreach (var doorDto in doorDtos)
                 {
-                    switch (doorDto.type.ToLower())
+                    switch (doorDto.Type.ToLower())
                     {
-                        case "colored":
-                            door = new ColoredDoor(door, doorDto.color);
+                        case TileTypes.Colored:
+                            door = new ColoredDoor(door, doorDto.Color);
                             break;
-                        case "toggle":
+                        case TileTypes.Toggle:
                             door = new ToggleDoor(door);
                             break;
-                        case "closing gate":
+                        case TileTypes.ClosingGate:
                             door = new ClosingGate(door);
                             break;
                     }

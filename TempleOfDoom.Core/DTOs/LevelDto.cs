@@ -1,82 +1,158 @@
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace TempleOfDoom.Core.DTOs
 {
     public class LevelDto
     {
-        public RoomDto[] rooms { get; set; }
-        public ConnectionDto[] connections { get; set; }
-        public PlayerDto player { get; set; }
+        [JsonPropertyName("rooms")]
+        public RoomDto[] Rooms { get; set; }
+        
+        [JsonPropertyName("connections")]
+        public ConnectionDto[] Connections { get; set; }
+        
+        [JsonPropertyName("player")]
+        public PlayerDto Player { get; set; }
     }
 
     public class PlayerDto
     {
-        public int startRoomId { get; set; }
-        public int startX { get; set; }
-        public int startY { get; set; }
-        public int lives { get; set; }
+        [JsonPropertyName("startRoomId")]
+        public int StartRoomId { get; set; }
+        
+        [JsonPropertyName("startX")]
+        public int StartX { get; set; }
+        
+        [JsonPropertyName("startY")]
+        public int StartY { get; set; }
+        
+        [JsonPropertyName("lives")]
+        public int Lives { get; set; }
     }
 
     public class RoomDto
     {
-        public int id { get; set; }
-        public string type { get; set; }
-        public int width { get; set; }
-        public int height { get; set; }
-        public ItemDto[] items { get; set; }
-        public SpecialfloortileDto[] specialFloorTiles { get; set; }
-        public EnemyDto[] enemies { get; set; }
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
+        
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+        
+        [JsonPropertyName("width")]
+        public int Width { get; set; }
+        
+        [JsonPropertyName("height")]
+        public int Height { get; set; }
+        
+        [JsonPropertyName("items")]
+        public ItemDto[] Items { get; set; }
+        
+        [JsonPropertyName("specialFloorTiles")]
+        public SpecialTileDto[] SpecialFloorTiles { get; set; }
+        
+        [JsonPropertyName("enemies")]
+        public EnemyDto[] Enemies { get; set; }
     }
 
     public class ItemDto
     {
-        public string type { get; set; }
-        public int damage { get; set; }
-        public int x { get; set; }
-        public int y { get; set; }
-        public string color { get; set; }
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+        
+        [JsonPropertyName("damage")]
+        public int Damage { get; set; }
+        
+        [JsonPropertyName("x")]
+        public int X { get; set; }
+        
+        [JsonPropertyName("y")]
+        public int Y { get; set; }
+        
+        [JsonPropertyName("color")]
+        public string Color { get; set; }
     }
 
-    public class SpecialfloortileDto
+    public class SpecialTileDto
     {
-        public string type { get; set; }
-        public string direction { get; set; }
-        public int x { get; set; }
-        public int y { get; set; }
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+        
+        [JsonPropertyName("direction")]
+        public string Direction { get; set; }
+        
+        [JsonPropertyName("x")]
+        public int X { get; set; }
+        
+        [JsonPropertyName("y")]
+        public int Y { get; set; }
     }
 
     public class EnemyDto
     {
-        public string type { get; set; }
-        public int x { get; set; }
-        public int y { get; set; }
-        public int minX { get; set; }
-        public int minY { get; set; }
-        public int maxX { get; set; }
-        public int maxY { get; set; }
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+        
+        [JsonPropertyName("x")]
+        public int X { get; set; }
+        
+        [JsonPropertyName("y")]
+        public int Y { get; set; }
+        
+        [JsonPropertyName("minX")]
+        public int MinX { get; set; }
+        
+        [JsonPropertyName("minY")]
+        public int MinY { get; set; }
+        
+        [JsonPropertyName("maxX")]
+        public int MaxX { get; set; }
+        
+        [JsonPropertyName("maxY")]
+        public int MaxY { get; set; }
     }
 
     public class ConnectionDto
     {
-        public int? NORTH { get; set; }
-        public int? SOUTH { get; set; }
-        public int? WEST { get; set; }
-        public int? EAST { get; set; }
-        public DoorDto[] doors { get; set; }
-        public PortalDto[] portal { get; set; }
+        [JsonPropertyName("NORTH")]
+        public int? North { get; set; }
+
+        [JsonPropertyName("SOUTH")]
+        public int? South { get; set; }
+        
+        [JsonPropertyName("WEST")]
+        public int? West { get; set; }
+        
+        [JsonPropertyName("EAST")]
+        public int? East { get; set; }
+        
+        [JsonPropertyName("doors")]
+        public DoorDto[] Doors { get; set; }
+        
+        [JsonPropertyName("portal")]
+        public PortalDto[] Portals { get; set; }
     }
 
     public class DoorDto
     {
-        public string type { get; set; }
-        public string color { get; set; }
-        public int no_of_stones { get; set; }
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+        
+        [JsonPropertyName("color")]
+        public string Color { get; set; }
+        
+        [JsonPropertyName("no_of_stones")]
+        public int NoOfStones { get; set; }
     }
 
     public class PortalDto
     {
-        public int roomId { get; set; }
-        public int x { get; set; }
-        public int y { get; set; }
+        [JsonPropertyName("roomId")]
+        public int RoomId { get; set; }
+        
+        [JsonPropertyName("x")]
+        public int X { get; set; }
+        
+        [JsonPropertyName("y")]
+        public int Y { get; set; }
     }
 }
