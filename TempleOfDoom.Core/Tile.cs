@@ -7,7 +7,13 @@ namespace TempleOfDoom.Core
         public Item CurrentItem { get; set; }
 
         public abstract void Interact(Player player);
-        public abstract bool IsWalkable();
+        public virtual bool IsWalkable(Player player)
+        {
+             return true; 
+        }
+        // Making it virtual with default true is safer/easier, or keep abstract. 
+        // Let's keep abstract to force implementation consideration, but Abstract methods match interface.
+        // Wait, IsWalkable is on IGameObject too.
         
         
         public char GetSprite()
