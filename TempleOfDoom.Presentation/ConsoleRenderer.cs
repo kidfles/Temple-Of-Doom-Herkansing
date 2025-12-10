@@ -27,14 +27,22 @@ namespace TempleOfDoom.Presentation
             {
                 for (int x = 0; x < room.Width; x++)
                 {
-                   IGameObject tile = room.GetTile(x, y);
-                   if (tile != null)
+                   // Check if player is here
+                   if (level.Player != null && level.Player.CurrentRoomId == room.Id && level.Player.X == x && level.Player.Y == y)
                    {
-                       Console.Write(tile.GetSprite());
+                       Console.Write('@');
                    }
                    else
                    {
-                       Console.Write(' '); // Empty space if null
+                       IGameObject tile = room.GetTile(x, y);
+                       if (tile != null)
+                       {
+                           Console.Write(tile.GetSprite());
+                       }
+                       else
+                       {
+                           Console.Write(' '); // Empty space if null
+                       }
                    }
                 }
                 Console.WriteLine();
