@@ -13,6 +13,8 @@ namespace TempleOfDoom.Logic
                     return new FloorTile();
                 case "wall":
                     return new WallTile();
+                case "conveyor belt":
+                    return new ConveyorBeltTile();
                 default:
                     throw new ArgumentException($"Unknown tile type: {type}");
             }
