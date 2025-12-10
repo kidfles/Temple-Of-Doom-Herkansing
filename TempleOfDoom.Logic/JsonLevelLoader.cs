@@ -3,6 +3,7 @@ using System.Text.Json;
 using TempleOfDoom.Core;
 using TempleOfDoom.Core.DTOs;
 using TempleOfDoom.Core.Items;
+using TempleOfDoom.Core.Doors;
 
 namespace TempleOfDoom.Logic
 {
@@ -34,9 +35,6 @@ namespace TempleOfDoom.Logic
                     }
                 }
                 
-                // Add walls? The user requirement says "Grid of objects". 
-                // Usually floors are bounded by walls, but the DTO doesn't specify walls explicitly in a grid format like a map string.
-                // Assuming default is floor, and we overlay special tiles.
 
                 if (roomDto.specialFloorTiles != null)
                 {
@@ -82,7 +80,7 @@ namespace TempleOfDoom.Logic
                         if (item != null)
                         {
                             var tile = room.GetTile(itemDto.x, itemDto.y);
-                            if (tile is Tile concreteTile) // Room.GetTile returns IGameObject, need cast to Tile to set CurrentItem
+                            if (tile is Tile concreteTile) 
                             {
                                 concreteTile.CurrentItem = item;
                             }
@@ -129,6 +127,53 @@ namespace TempleOfDoom.Logic
                         if (room2 != null)
                         {
                             room2.SetTile(portal2.x, portal2.y, tile2);
+                        }
+                    }
+
+                    if (connection.doors != null && connection.doors.Length > 0)
+                    {
+                        IDoor door = new BasicDoor();
+                        foreach (var doorDto in connection.doors)
+                        {
+                            switch (doorDto.type.ToLower())
+                            {
+                                case "colored":
+                                    door = new ColoredDoor(door, doorDto.color);
+                                    break;
+                                case "toggle":
+                                    door = new ToggleDoor(door);
+                                    break;
+                                case "closing gate":
+                                    door = new ClosingGate(door);
+                                    break;
+                                case "open on odd": /
+                                case "open on stones in room":
+                                   
+                                    break;
+                            }
+                        }
+
+                       =
+
+                        if (connection.NORTH.HasValue && connection.SOUTH.HasValue)
+                        {
+                            int r1Id = connection.NORTH.Value;
+                            int r2Id = connection.SOUTH.Value;
+                            Room r1 = level.Rooms.Find(r => r.Id == r1Id);
+                            Room r2 = level.Rooms.Find(r => r.Id == r2Id);
+                            
+                            if (r1 != null) r1.SetTile(r1.Width / 2, r1.Height - 1, new DoorTile(door)); 
+                            if (r2 != null) r2.SetTile(r2.Width / 2, 0, new DoorTile(door)); 
+                        }
+                        else if (connection.WEST.HasValue && connection.EAST.HasValue)
+                        {
+                             int r1Id = connection.WEST.Value;
+                             int r2Id = connection.EAST.Value;
+                             Room r1 = level.Rooms.Find(r => r.Id == r1Id);
+                             Room r2 = level.Rooms.Find(r => r.Id == r2Id);
+
+                             if (r1 != null) r1.SetTile(r1.Width - 1, r1.Height / 2, new DoorTile(door)); 
+                             if (r2 != null) r2.SetTile(0, r2.Height / 2, new DoorTile(door)); 
                         }
                     }
                 }
