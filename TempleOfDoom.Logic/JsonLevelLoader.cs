@@ -132,7 +132,9 @@ namespace TempleOfDoom.Logic
 
                     if (connection.doors != null && connection.doors.Length > 0)
                     {
-                        Tile doorTile = tileFactory.CreateDoor(connection.doors);
+                    if (connection.doors != null && connection.doors.Length > 0)
+                    {
+                        IDoor sharedDoorLogic = tileFactory.CreateDoorLogic(connection.doors);
 
                         if (connection.NORTH.HasValue && connection.SOUTH.HasValue)
                         {
@@ -141,8 +143,23 @@ namespace TempleOfDoom.Logic
                             Room r1 = level.Rooms.Find(r => r.Id == r1Id);
                             Room r2 = level.Rooms.Find(r => r.Id == r2Id);
                             
-                            if (r1 != null) r1.SetTile(r1.Width / 2, r1.Height - 1, doorTile); 
-                            if (r2 != null) r2.SetTile(r2.Width / 2, 0, doorTile); 
+                            if (r1 != null && r2 != null)
+                            {
+                                
+                                int x1 = r1.Width / 2;
+                                int y1 = r1.Height - 1;
+                                
+                                int x2 = r2.Width / 2;
+                                int y2 = 0;
+
+                                // Door in R1 -> Targets R2
+                                Tile d1 = tileFactory.CreateDoorTile(sharedDoorLogic, r2Id, x2, y2);
+                                r1.SetTile(x1, y1, d1);
+
+                                // Door in R2 -> Targets R1
+                                Tile d2 = tileFactory.CreateDoorTile(sharedDoorLogic, r1Id, x1, y1);
+                                r2.SetTile(x2, y2, d2);
+                            }
                         }
                         else if (connection.WEST.HasValue && connection.EAST.HasValue)
                         {
@@ -151,8 +168,23 @@ namespace TempleOfDoom.Logic
                              Room r1 = level.Rooms.Find(r => r.Id == r1Id);
                              Room r2 = level.Rooms.Find(r => r.Id == r2Id);
 
-                             if (r1 != null) r1.SetTile(r1.Width - 1, r1.Height / 2, doorTile); 
-                             if (r2 != null) r2.SetTile(0, r2.Height / 2, doorTile); 
+                             if (r1 != null && r2 != null)
+                             {
+                                 
+                                 int x1 = r1.Width - 1;
+                                 int y1 = r1.Height / 2;
+                                 
+                                 int x2 = 0;
+                                 int y2 = r2.Height / 2;
+
+                                 // Door in R1 -> Targets R2
+                                 Tile d1 = tileFactory.CreateDoorTile(sharedDoorLogic, r2Id, x2, y2);
+                                 r1.SetTile(x1, y1, d1);
+                                 
+                                 // Door in R2 -> Targets R1
+                                 Tile d2 = tileFactory.CreateDoorTile(sharedDoorLogic, r1Id, x1, y1);
+                                 r2.SetTile(x2, y2, d2);
+                             }
                         }
                     }
                 }

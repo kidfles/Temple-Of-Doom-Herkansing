@@ -21,7 +21,7 @@ namespace TempleOfDoom.Logic
                     throw new ArgumentException($"Unknown tile type: {type}");
                 }
 
-        public Tile CreateDoor(DoorDto[] doorDtos)
+        public IDoor CreateDoorLogic(DoorDto[] doorDtos)
         {
             IDoor door = new BasicDoor();
             if (doorDtos != null)
@@ -42,7 +42,18 @@ namespace TempleOfDoom.Logic
                     }
                 }
             }
-            return new DoorTile(door);
+            return door;
+        }
+
+        public Tile CreateDoorTile(IDoor doorLogic, int targetRoomId, int targetX, int targetY)
+        {
+            var tile = new DoorTile(doorLogic)
+            {
+                TargetRoomId = targetRoomId,
+                TargetX = targetX,
+                TargetY = targetY
+            };
+            return tile;
         }
     }       
 }
