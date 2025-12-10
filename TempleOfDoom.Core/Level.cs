@@ -6,6 +6,7 @@ namespace TempleOfDoom.Core
     {
         // Domain object for the Level.
         public List<Room> Rooms { get; set; }
+        public Room CurrentRoom { get; set; }
 
         public Level()
         {
