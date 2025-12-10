@@ -5,7 +5,7 @@ namespace TempleOfDoom.Core.Items
     {
         public abstract void Interact(Player player);
         
-        public virtual bool IsWalkable()
+        public virtual bool IsWalkable(Player player)
         {
             return true;
         }
