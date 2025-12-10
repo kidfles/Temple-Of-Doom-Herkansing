@@ -22,7 +22,7 @@ namespace TempleOfDoom.Core
             {
                 return tiles[x, y];
             }
-            return null; // Or throw exception
+            return null; 
         }
 
         public void SetTile(int x, int y, IGameObject tile)

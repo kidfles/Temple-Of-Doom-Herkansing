@@ -16,15 +16,12 @@ namespace TempleOfDoom.Core
                     CurrentItem = null; // Remove item only if requested
                 }
             }
-            return false; // Tiles themselves are typically not removed via interaction
+            return false; 
         }
         public virtual bool IsWalkable(Player player)
         {
              return true; 
         }
-        // Making it virtual with default true is safer/easier, or keep abstract. 
-        // Let's keep abstract to force implementation consideration, but Abstract methods match interface.
-        // Wait, IsWalkable is on IGameObject too.
         
         
         public char GetSprite()

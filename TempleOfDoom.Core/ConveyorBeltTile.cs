@@ -19,5 +19,17 @@ namespace TempleOfDoom.Core
         {
             return 'C'; 
         }
+
+        public (int x, int y) GetTransportVector()
+        {
+            return Direction switch
+            {
+                Direction.NORTH => (0, -1),
+                Direction.EAST => (1, 0),
+                Direction.SOUTH => (0, 1),
+                Direction.WEST => (-1, 0),
+                _ => (0, 0)
+            };
+        }
     }
 }

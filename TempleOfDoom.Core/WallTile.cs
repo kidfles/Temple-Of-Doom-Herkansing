@@ -5,7 +5,6 @@ namespace TempleOfDoom.Core
     {
         public override bool Interact(Player player)
         {
-            // Wall interactions (e.g. bumping into it)
             return false;
         }
 

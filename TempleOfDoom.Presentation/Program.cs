@@ -12,11 +12,9 @@ namespace TempleOfDoom
         {
             string levelFile = "TempleOfDoom_Extended_B_2122.json";
             
-            // Validate file existence
-            // Validate file existence
+
             if (!File.Exists(levelFile))
             {
-                 // Try looking in the application base directory as a fallback
                  string baseDir = AppDomain.CurrentDomain.BaseDirectory;
                  string localPath = Path.Combine(baseDir, levelFile);
                  

@@ -60,7 +60,6 @@ namespace TempleOfDoom.Logic
 
         private void ProcessMove(Player player, int targetX, int targetY)
         {
-            // Process movement and interaction if target is valid
             if (targetX >= 0 && targetX < level.CurrentRoom.Width &&
                 targetY >= 0 && targetY < level.CurrentRoom.Height)
             {
@@ -74,20 +73,15 @@ namespace TempleOfDoom.Logic
 
                     CheckRoomSwitch(level, player);
 
-                    // Handle conveyor belt logic
                     var currentTile = level.CurrentRoom.GetTile(player.X, player.Y);
                     if (currentTile is ConveyorBeltTile conveyor)
                     {
                         int slideX = player.X;
                         int slideY = player.Y;
                         
-                        switch (conveyor.Direction)
-                        {
-                            case Direction.NORTH: slideY--; break;
-                            case Direction.EAST: slideX++; break;
-                            case Direction.SOUTH: slideY++; break;
-                            case Direction.WEST: slideX--; break;
-                        }
+                        var vector = conveyor.GetTransportVector();
+                        slideX += vector.x;
+                        slideY += vector.y;
                         
                         if (slideX >= 0 && slideX < level.CurrentRoom.Width &&
                             slideY >= 0 && slideY < level.CurrentRoom.Height)
@@ -114,8 +108,6 @@ namespace TempleOfDoom.Logic
                 if (newRoom != null)
                 {
                     level.CurrentRoom = newRoom;
-                    // Note: TriggerGameTick is called by HandleInput/ProcessMove, 
-                    // preventing double render in some flows, but ensured here if called externally.
                 }
             }
         }
