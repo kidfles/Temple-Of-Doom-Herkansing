@@ -44,7 +44,10 @@ namespace TempleOfDoom.Logic
                         Tile tile = tileFactory.CreateTile(specialTile.type);
                         if (tile is ConveyorBeltTile conveyor)
                         {
-                            conveyor.Direction = specialTile.direction;
+                            if (System.Enum.TryParse<Direction>(specialTile.direction, true, out var dir))
+                            {
+                                conveyor.Direction = dir;
+                            }
                         }
                         room.SetTile(specialTile.x, specialTile.y, tile);
                     }
