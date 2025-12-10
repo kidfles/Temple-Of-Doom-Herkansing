@@ -132,28 +132,7 @@ namespace TempleOfDoom.Logic
 
                     if (connection.doors != null && connection.doors.Length > 0)
                     {
-                        IDoor door = new BasicDoor();
-                        foreach (var doorDto in connection.doors)
-                        {
-                            switch (doorDto.type.ToLower())
-                            {
-                                case "colored":
-                                    door = new ColoredDoor(door, doorDto.color);
-                                    break;
-                                case "toggle":
-                                    door = new ToggleDoor(door);
-                                    break;
-                                case "closing gate":
-                                    door = new ClosingGate(door);
-                                    break;
-                                case "open on odd": /
-                                case "open on stones in room":
-                                   
-                                    break;
-                            }
-                        }
-
-                       =
+                        Tile doorTile = tileFactory.CreateDoor(connection.doors);
 
                         if (connection.NORTH.HasValue && connection.SOUTH.HasValue)
                         {
@@ -162,8 +141,8 @@ namespace TempleOfDoom.Logic
                             Room r1 = level.Rooms.Find(r => r.Id == r1Id);
                             Room r2 = level.Rooms.Find(r => r.Id == r2Id);
                             
-                            if (r1 != null) r1.SetTile(r1.Width / 2, r1.Height - 1, new DoorTile(door)); 
-                            if (r2 != null) r2.SetTile(r2.Width / 2, 0, new DoorTile(door)); 
+                            if (r1 != null) r1.SetTile(r1.Width / 2, r1.Height - 1, doorTile); 
+                            if (r2 != null) r2.SetTile(r2.Width / 2, 0, doorTile); 
                         }
                         else if (connection.WEST.HasValue && connection.EAST.HasValue)
                         {
@@ -172,8 +151,8 @@ namespace TempleOfDoom.Logic
                              Room r1 = level.Rooms.Find(r => r.Id == r1Id);
                              Room r2 = level.Rooms.Find(r => r.Id == r2Id);
 
-                             if (r1 != null) r1.SetTile(r1.Width - 1, r1.Height / 2, new DoorTile(door)); 
-                             if (r2 != null) r2.SetTile(0, r2.Height / 2, new DoorTile(door)); 
+                             if (r1 != null) r1.SetTile(r1.Width - 1, r1.Height / 2, doorTile); 
+                             if (r2 != null) r2.SetTile(0, r2.Height / 2, doorTile); 
                         }
                     }
                 }
