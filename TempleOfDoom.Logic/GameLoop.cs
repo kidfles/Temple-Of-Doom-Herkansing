@@ -35,5 +35,18 @@ namespace TempleOfDoom.Logic
                 observer.OnGameTick();
             }
         }
+
+        public void CheckRoomSwitch(Level level, Player player)
+        {
+            if (player.CurrentRoomId != level.CurrentRoom.Id)
+            {
+                var newRoom = level.Rooms.Find(r => r.Id == player.CurrentRoomId);
+                if (newRoom != null)
+                {
+                    level.CurrentRoom = newRoom;
+                    TriggerGameTick();
+                }
+            }
+        }
     }
 }
