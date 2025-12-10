@@ -52,7 +52,7 @@ namespace TempleOfDoom
             }
 
             GameLoop gameLoop = new GameLoop(level);
-            ConsoleRenderer renderer = new ConsoleRenderer(level);
+            ConsoleRenderer renderer = new ConsoleRenderer(level, gameLoop);
             gameLoop.RegisterObserver(renderer);
 
             // Initial Draw

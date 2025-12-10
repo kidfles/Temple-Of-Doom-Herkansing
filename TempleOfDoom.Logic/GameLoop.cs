@@ -8,11 +8,17 @@ namespace TempleOfDoom.Logic
     {
         private List<IGameObserver> observers;
         private Level level;
+        
+        public DateTime StartTime { get; private set; }
+        public TimeSpan ElapsedTime => DateTime.Now - StartTime;
+        public bool IsGameOver { get; private set; }
+        public bool HasWon { get; private set; }
 
         public GameLoop(Level level)
         {
             this.level = level;
             observers = new List<IGameObserver>();
+            StartTime = DateTime.Now;
         }
 
         public void RegisterObserver(IGameObserver observer)
@@ -33,6 +39,16 @@ namespace TempleOfDoom.Logic
 
         public void TriggerGameTick()
         {
+            if (level.Player.Lives <= 0)
+            {
+                IsGameOver = true;
+            }
+            else if (level.Player.StonesCollected >= level.TotalStones && level.TotalStones > 0)
+            {
+                HasWon = true;
+                IsGameOver = true;
+            }
+
             foreach (var observer in observers)
             {
                 observer.OnGameTick();
@@ -41,6 +57,8 @@ namespace TempleOfDoom.Logic
 
         public void HandleInput(ConsoleKey key)
         {
+            if (IsGameOver) return;
+
             Player player = level.Player;
             int targetX = player.X;
             int targetY = player.Y;

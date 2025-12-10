@@ -7,7 +7,7 @@ namespace TempleOfDoom.Core.Items
 
         public override bool Interact(Player player)
         {
-            // Damage logic maar nog zonder de logic
+            player.Lives -= Damage;
             return false;
         }
 

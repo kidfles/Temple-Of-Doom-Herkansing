@@ -5,7 +5,7 @@ namespace TempleOfDoom.Core.Items
     {
         public override bool Interact(Player player)
         {
-            // Pickup logic komt nog
+            player.StonesCollected++;
             return true;
         }
 

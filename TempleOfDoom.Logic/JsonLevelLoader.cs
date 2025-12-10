@@ -60,6 +60,7 @@ namespace TempleOfDoom.Logic
                         {
                             case TileTypes.SankaraStone:
                                 item = new SankaraStone();
+                                level.TotalStones++;
                                 break;
                             case TileTypes.Key:
                                 item = new Key { Color = itemDto.Color };
@@ -186,6 +187,7 @@ namespace TempleOfDoom.Logic
                     X = levelDto.Player.StartX,
                     Y = levelDto.Player.StartY,
                     CurrentRoomId = levelDto.Player.StartRoomId,
+                    Lives = levelDto.Player.Lives > 0 ? levelDto.Player.Lives : 3
                 };
 
                 level.CurrentRoom = level.Rooms.Find(r => r.Id == level.Player.CurrentRoomId);

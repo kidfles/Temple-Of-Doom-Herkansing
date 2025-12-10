@@ -8,6 +8,7 @@ namespace TempleOfDoom.Core
         public List<Room> Rooms { get; set; }
         public Room CurrentRoom { get; set; }
         public Player Player { get; set; }
+        public int TotalStones { get; set; }
 
         public Level()
         {
