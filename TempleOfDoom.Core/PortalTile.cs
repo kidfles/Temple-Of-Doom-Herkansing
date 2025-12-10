@@ -21,7 +21,7 @@ namespace TempleOfDoom.Core
 
         public override char GetSprite()
         {
-            return 'O'; // 'O' for Portal? Or '@'? Let's use 'O'.
+            return 'O'; 
         }
     }
 }
