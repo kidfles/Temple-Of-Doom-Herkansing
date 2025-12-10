@@ -3,11 +3,25 @@ namespace TempleOfDoom.Core
 {
     public class ConveyorBeltTile : Tile
     {
-        public string Direction { get; set; }
+        public Direction Direction { get; set; }
 
         public override void Interact(Player player)
         {
-            // Logic for moving player in Direction will be implemented later
+            switch (Direction)
+            {
+                case Direction.NORTH:
+                    player.Y--;
+                    break;
+                case Direction.EAST:
+                    player.X++;
+                    break;
+                case Direction.SOUTH:
+                    player.Y++;
+                    break;
+                case Direction.WEST:
+                    player.X--;
+                    break;
+            }
         }
 
         public override bool IsWalkable()
@@ -17,7 +31,7 @@ namespace TempleOfDoom.Core
 
         public override char GetSprite()
         {
-            return 'C'; // Placeholder sprite
+            return 'C'; 
         }
     }
 }
