@@ -39,6 +39,8 @@ namespace TempleOfDoom.Logic
 
         public void TriggerGameTick()
         {
+            if (level.Player == null) return;
+
             if (level.Player.Lives <= 0)
             {
                 IsGameOver = true;
@@ -83,6 +85,7 @@ namespace TempleOfDoom.Logic
         {
             if (IsGameOver) return;
 
+            if (level.Player == null) return;
             Player player = level.Player;
             int targetX = player.X;
             int targetY = player.Y;
@@ -149,7 +152,7 @@ namespace TempleOfDoom.Logic
 
         public void CheckRoomSwitch(Level level, Player player)
         {
-            if (player.CurrentRoomId != level.CurrentRoom.Id)
+            if (level.CurrentRoom != null && player.CurrentRoomId != level.CurrentRoom.Id)
             {
                 var newRoom = level.Rooms.Find(r => r.Id == player.CurrentRoomId);
                 if (newRoom != null)

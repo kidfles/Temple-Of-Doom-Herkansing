@@ -111,6 +111,8 @@ namespace TempleOfDoom.Logic
 
                         if (dllEnemy != null)
                         {
+                            dllEnemy.CurrentField = new TempleOfDoom.Logic.Enemies.RoomAdapter(room, enemyDto.X, enemyDto.Y);
+                            
                             var adapter = new TempleOfDoom.Logic.Enemies.EnemyAdapter(dllEnemy);
                             room.Enemies.Add(adapter);
                         }
