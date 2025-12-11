@@ -13,6 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="CODE_TempleOfDoom_DownloadableContent">
+      <HintPath>..\CODE_TempleOfDoom_DownloadableContent.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="..\TempleOfDoom_Extended_B_2122.json" Link="TempleOfDoom_Extended_B_2122.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
