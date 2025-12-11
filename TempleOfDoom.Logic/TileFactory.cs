@@ -29,7 +29,7 @@ namespace TempleOfDoom.Logic
             {
                 foreach (var doorDto in doorDtos)
                 {
-                    switch (doorDto.Type.ToLower())
+                    switch (doorDto.Type?.ToLower())
                     {
                         case TileTypes.Colored:
                             door = new ColoredDoor(door, doorDto.Color ?? "red");
