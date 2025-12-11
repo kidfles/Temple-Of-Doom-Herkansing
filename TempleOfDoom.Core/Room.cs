@@ -16,7 +16,7 @@ namespace TempleOfDoom.Core
             tiles = new IGameObject[width, height];
         }
 
-        public IGameObject GetTile(int x, int y)
+        public IGameObject? GetTile(int x, int y)
         {
             if (IsValidCoordinate(x, y))
             {

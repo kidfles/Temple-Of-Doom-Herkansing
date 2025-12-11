@@ -6,13 +6,13 @@ namespace TempleOfDoom.Core.DTOs
     public class LevelDto
     {
         [JsonPropertyName("rooms")]
-        public RoomDto[] Rooms { get; set; }
+        public RoomDto[]? Rooms { get; set; }
         
         [JsonPropertyName("connections")]
-        public ConnectionDto[] Connections { get; set; }
+        public ConnectionDto[]? Connections { get; set; }
         
         [JsonPropertyName("player")]
-        public PlayerDto Player { get; set; }
+        public PlayerDto? Player { get; set; }
     }
 
     public class PlayerDto
@@ -36,7 +36,7 @@ namespace TempleOfDoom.Core.DTOs
         public int Id { get; set; }
         
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
         
         [JsonPropertyName("width")]
         public int Width { get; set; }
@@ -45,19 +45,19 @@ namespace TempleOfDoom.Core.DTOs
         public int Height { get; set; }
         
         [JsonPropertyName("items")]
-        public ItemDto[] Items { get; set; }
+        public ItemDto[]? Items { get; set; }
         
         [JsonPropertyName("specialFloorTiles")]
-        public SpecialTileDto[] SpecialFloorTiles { get; set; }
+        public SpecialTileDto[]? SpecialFloorTiles { get; set; }
         
         [JsonPropertyName("enemies")]
-        public EnemyDto[] Enemies { get; set; }
+        public EnemyDto[]? Enemies { get; set; }
     }
 
     public class ItemDto
     {
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
         
         [JsonPropertyName("damage")]
         public int Damage { get; set; }
@@ -69,16 +69,16 @@ namespace TempleOfDoom.Core.DTOs
         public int Y { get; set; }
         
         [JsonPropertyName("color")]
-        public string Color { get; set; }
+        public string? Color { get; set; }
     }
 
     public class SpecialTileDto
     {
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
         
         [JsonPropertyName("direction")]
-        public string Direction { get; set; }
+        public string? Direction { get; set; }
         
         [JsonPropertyName("x")]
         public int X { get; set; }
@@ -90,7 +90,7 @@ namespace TempleOfDoom.Core.DTOs
     public class EnemyDto
     {
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
         
         [JsonPropertyName("x")]
         public int X { get; set; }
@@ -126,19 +126,19 @@ namespace TempleOfDoom.Core.DTOs
         public int? East { get; set; }
         
         [JsonPropertyName("doors")]
-        public DoorDto[] Doors { get; set; }
+        public DoorDto[]? Doors { get; set; }
         
         [JsonPropertyName("portal")]
-        public PortalDto[] Portals { get; set; }
+        public PortalDto[]? Portals { get; set; }
     }
 
     public class DoorDto
     {
         [JsonPropertyName("type")]
-        public string Type { get; set; }
+        public string? Type { get; set; }
         
         [JsonPropertyName("color")]
-        public string Color { get; set; }
+        public string? Color { get; set; }
         
         [JsonPropertyName("no_of_stones")]
         public int NoOfStones { get; set; }

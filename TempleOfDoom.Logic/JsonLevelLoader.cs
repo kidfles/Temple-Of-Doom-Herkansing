@@ -17,7 +17,12 @@ namespace TempleOfDoom.Logic
             }
 
             string jsonContent = File.ReadAllText(path);
-            LevelDto levelDto = JsonSerializer.Deserialize<LevelDto>(jsonContent);
+            LevelDto? levelDto = JsonSerializer.Deserialize<LevelDto>(jsonContent);
+
+            if (levelDto == null || levelDto.Rooms == null)
+            {
+                throw new Exception("Failed to load level: JSON content is invalid or empty.");
+            }
 
             Level level = new Level();
             TileFactory tileFactory = new TileFactory();
@@ -39,10 +44,12 @@ namespace TempleOfDoom.Logic
                 {
                     foreach (var specialTile in roomDto.SpecialFloorTiles)
                     {
+                        if (specialTile.Type == null) continue; // Skip invalid data
+
                         Tile tile = tileFactory.CreateTile(specialTile.Type);
-                        if (tile is ConveyorBeltTile conveyor)
+                        if (tile is ConveyorBeltTile conveyor && specialTile.Direction != null)
                         {
-                            if (System.Enum.TryParse<Direction>(specialTile.Direction, true, out var dir))
+                            if (Enum.TryParse<Direction>(specialTile.Direction, true, out var dir))
                             {
                                 conveyor.Direction = dir;
                             }
@@ -51,11 +58,14 @@ namespace TempleOfDoom.Logic
                     }
                 }
 
+                // 3. Safe Array Iteration (Items)
                 if (roomDto.Items != null)
                 {
                     foreach (var itemDto in roomDto.Items)
                     {
-                        Item item = null;
+                        if (itemDto.Type == null) continue;
+
+                        Item? item = null;
                         switch (itemDto.Type.ToLower())
                         {
                             case TileTypes.SankaraStone:
@@ -63,7 +73,7 @@ namespace TempleOfDoom.Logic
                                 level.TotalStones++;
                                 break;
                             case TileTypes.Key:
-                                item = new Key { Color = itemDto.Color };
+                                item = new Key { Color = itemDto.Color ?? "unknown" };
                                 break;
                             case TileTypes.BoobyTrap:
                                 item = new BoobyTrap { Damage = itemDto.Damage };
@@ -75,10 +85,10 @@ namespace TempleOfDoom.Logic
 
                         if (item != null)
                         {
-                            var tile = room.GetTile(itemDto.X, itemDto.Y);
-                            if (tile is Tile concreteTile)
+                            var tile = room.GetTile(itemDto.X, itemDto.Y) as Tile;
+                            if (tile != null)
                             {
-                                concreteTile.CurrentItem = item;
+                                tile.CurrentItem = item;
                             }
                         }
                     }
@@ -87,15 +97,18 @@ namespace TempleOfDoom.Logic
                 level.Rooms.Add(room);
             }
 
+            // 4. Safe Array Iteration (Connections)
             if (levelDto.Connections != null)
             {
                 foreach (var connection in levelDto.Connections)
                 {
+                    // Portals
                     if (connection.Portals != null && connection.Portals.Length == 2)
                     {
                         var portal1 = connection.Portals[0];
                         var portal2 = connection.Portals[1];
 
+                        // Create two linked tiles
                         PortalTile tile1 = new PortalTile
                         {
                             TargetRoomId = portal2.RoomId,
@@ -110,76 +123,60 @@ namespace TempleOfDoom.Logic
                             TargetY = portal1.Y
                         };
 
-                        Room room1 = level.Rooms.Find(r => r.Id == portal1.RoomId);
-                        if (room1 != null)
-                        {
-                            room1.SetTile(portal1.X, portal1.Y, tile1);
-                        }
+                        // Assign to rooms (safely)
+                        var room1 = level.Rooms.Find(r => r.Id == portal1.RoomId);
+                        if (room1 != null) room1.SetTile(portal1.X, portal1.Y, tile1);
 
-                        Room room2 = level.Rooms.Find(r => r.Id == portal2.RoomId);
-                        if (room2 != null)
-                        {
-                            room2.SetTile(portal2.X, portal2.Y, tile2);
-                        }
+                        var room2 = level.Rooms.Find(r => r.Id == portal2.RoomId);
+                        if (room2 != null) room2.SetTile(portal2.X, portal2.Y, tile2);
                     }
 
+                    // Doors
                     if (connection.Doors != null)
                     {
-                        // Create shared door logic
                         IDoor sharedDoorLogic = tileFactory.CreateDoorLogic(connection.Doors);
 
                         if (connection.North.HasValue && connection.South.HasValue)
                         {
                             int r1Id = connection.North.Value;
                             int r2Id = connection.South.Value;
-                            Room r1 = level.Rooms.Find(r => r.Id == r1Id);
-                            Room r2 = level.Rooms.Find(r => r.Id == r2Id);
+                            var r1 = level.Rooms.Find(r => r.Id == r1Id);
+                            var r2 = level.Rooms.Find(r => r.Id == r2Id);
 
                             if (r1 != null && r2 != null)
                             {
                                 int x1 = r1.Width / 2;
                                 int y1 = r1.Height - 1;
-
                                 int x2 = r2.Width / 2;
                                 int y2 = 0;
 
-                                // Door in R1 -> Targets R2
-                                Tile d1 = tileFactory.CreateDoorTile(sharedDoorLogic, r2Id, x2, y2);
-                                r1.SetTile(x1, y1, d1);
-
-                                // Door in R2 -> Targets R1
-                                Tile d2 = tileFactory.CreateDoorTile(sharedDoorLogic, r1Id, x1, y1);
-                                r2.SetTile(x2, y2, d2);
+                                r1.SetTile(x1, y1, tileFactory.CreateDoorTile(sharedDoorLogic, r2Id, x2, y2));
+                                r2.SetTile(x2, y2, tileFactory.CreateDoorTile(sharedDoorLogic, r1Id, x1, y1));
                             }
                         }
                         else if (connection.West.HasValue && connection.East.HasValue)
                         {
                             int r1Id = connection.West.Value;
                             int r2Id = connection.East.Value;
-                            Room r1 = level.Rooms.Find(r => r.Id == r1Id);
-                            Room r2 = level.Rooms.Find(r => r.Id == r2Id);
+                            var r1 = level.Rooms.Find(r => r.Id == r1Id);
+                            var r2 = level.Rooms.Find(r => r.Id == r2Id);
 
                             if (r1 != null && r2 != null)
                             {
                                 int x1 = r1.Width - 1;
                                 int y1 = r1.Height / 2;
-
                                 int x2 = 0;
                                 int y2 = r2.Height / 2;
 
-                                // Door in R1 -> Targets R2
-                                Tile d1 = tileFactory.CreateDoorTile(sharedDoorLogic, r2Id, x2, y2);
-                                r1.SetTile(x1, y1, d1);
-
-                                // Door in R2 -> Targets R1
-                                Tile d2 = tileFactory.CreateDoorTile(sharedDoorLogic, r1Id, x1, y1);
-                                r2.SetTile(x2, y2, d2);
+                                r1.SetTile(x1, y1, tileFactory.CreateDoorTile(sharedDoorLogic, r2Id, x2, y2));
+                                r2.SetTile(x2, y2, tileFactory.CreateDoorTile(sharedDoorLogic, r1Id, x1, y1));
                             }
                         }
                     }
                 }
             }
 
+            // 5. Player Initialization
             if (levelDto.Player != null)
             {
                 level.Player = new Player
@@ -191,6 +188,12 @@ namespace TempleOfDoom.Logic
                 };
 
                 level.CurrentRoom = level.Rooms.Find(r => r.Id == level.Player.CurrentRoomId);
+            }
+            
+            // 6. Final safety check
+            if (level.CurrentRoom == null && level.Rooms.Count > 0)
+            {
+                level.CurrentRoom = level.Rooms[0];
             }
 
             return level;

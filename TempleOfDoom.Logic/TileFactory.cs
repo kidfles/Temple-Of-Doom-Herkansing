@@ -32,7 +32,7 @@ namespace TempleOfDoom.Logic
                     switch (doorDto.Type.ToLower())
                     {
                         case TileTypes.Colored:
-                            door = new ColoredDoor(door, doorDto.Color);
+                            door = new ColoredDoor(door, doorDto.Color ?? "red");
                             break;
                         case TileTypes.Toggle:
                             door = new ToggleDoor(door);

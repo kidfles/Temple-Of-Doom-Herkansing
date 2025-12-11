@@ -4,7 +4,7 @@ namespace TempleOfDoom.Core
 {
     public abstract class Tile : IGameObject
     {
-        public Item CurrentItem { get; set; }
+        public Item? CurrentItem { get; set; }
 
         public virtual bool Interact(Player player)
         {
@@ -13,7 +13,7 @@ namespace TempleOfDoom.Core
                 bool shouldRemove = CurrentItem.Interact(player);
                 if (shouldRemove)
                 {
-                    CurrentItem = null; // Remove item only if requested
+                    CurrentItem = null; 
                 }
             }
             return false; 
