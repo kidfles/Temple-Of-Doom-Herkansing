@@ -8,6 +8,10 @@ namespace TempleOfDoom.Presentation
     {
         private Level level;
         private GameLoop gameLoop;
+        
+        // Define a fixed viewport size to ensure we always clear enough space
+        private const int VIEWPORT_HEIGHT = 20; 
+        private const int VIEWPORT_WIDTH = 60;
 
         public ConsoleRenderer(Level level, GameLoop loop)
         {
@@ -35,69 +39,78 @@ namespace TempleOfDoom.Presentation
         {
             var p = level.Player;
             if (p == null) return;
-            Console.WriteLine(new string('=', 50));
-            Console.WriteLine($" LIVES: {p.Lives}  |  STONES: {p.StonesCollected}/{level.TotalStones}  |  TIME: {gameLoop.ElapsedTime:mm\\:ss}");
-            Console.WriteLine($" KEYS: {p.GetKeyList()}");
-            Console.WriteLine(new string('=', 50));
+            // PadRight ensures the string overrides old text if numbers shrink
+            Console.WriteLine(new string('=', VIEWPORT_WIDTH));
+            Console.WriteLine($" LIVES: {p.Lives}  |  STONES: {p.StonesCollected}/{level.TotalStones}  |  TIME: {gameLoop.ElapsedTime:mm\\:ss}".PadRight(VIEWPORT_WIDTH));
+            Console.WriteLine($" KEYS: {p.GetKeyList()}".PadRight(VIEWPORT_WIDTH));
+            Console.WriteLine(new string('=', VIEWPORT_WIDTH));
         }
 
         private void RenderRoom(Room room)
         {
-            // Top Wall
+            int drawnLines = 0;
+
+            // 1. Top Wall
             Console.Write("#"); 
             for (int i = 0; i < room.Width; i++) Console.Write("#");
-            Console.WriteLine("#");
+            // Fill the rest of the line with space to erase old ghost walls
+            Console.WriteLine("#".PadRight(VIEWPORT_WIDTH - room.Width - 1)); 
+            drawnLines++;
 
+            // 2. Room Content
             for (int y = 0; y < room.Height; y++)
             {
                 Console.Write("#"); // Left Wall
                 for (int x = 0; x < room.Width; x++)
                 {
-                   if (level.Player != null && level.Player.CurrentRoomId == room.Id && level.Player.X == x && level.Player.Y == y)
-                   {
-                       Console.ForegroundColor = ConsoleColor.Cyan;
-                       Console.Write('@');
-                       Console.ResetColor();
-                   }
-                   else
-                   {
-                       var enemy = room.Enemies.Find(e => e.X == x && e.Y == y);
-                       if (enemy != null)
-                       {
+                    // Draw Player
+                    if (level.Player != null && level.Player.CurrentRoomId == room.Id && level.Player.X == x && level.Player.Y == y)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.Write('@');
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        // Draw Enemies
+                        var enemy = room.Enemies.Find(e => e.X == x && e.Y == y);
+                        if (enemy != null)
+                        {
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.Write('E');
                             Console.ResetColor();
-                       }
-                       else
-                       {
-                           IGameObject? tile = room.GetTile(x, y);
-                           if (tile != null)
-                           {
-                               Console.Write(tile.GetSprite());
-                           }
-                           else
-                           {
-                               Console.Write(' ');
-                           }
-                       }
-                   }
+                        }
+                        else
+                        {
+                            // Draw Tiles/Items
+                            IGameObject? tile = room.GetTile(x, y);
+                            char sprite = tile != null ? tile.GetSprite() : ' ';
+                            Console.Write(sprite);
+                        }
+                    }
                 }
-                Console.WriteLine("#"); // Right Wall
+                // Right Wall + Clear remaining line width
+                Console.WriteLine("#".PadRight(VIEWPORT_WIDTH - room.Width - 1));
+                drawnLines++;
             }
 
-            // Bottom Wall
+            // 3. Bottom Wall
             Console.Write("#");
             for (int i = 0; i < room.Width; i++) Console.Write("#");
-            Console.WriteLine("#");
+            Console.WriteLine("#".PadRight(VIEWPORT_WIDTH - room.Width - 1));
+            drawnLines++;
             
-            // Clear rest of screen
-            Console.WriteLine(new string(' ', 50));
-            Console.WriteLine(new string(' ', 50));
+            // 4. Aggressive Clearing (The Anti-Ghosting Fix)
+            // Fill the remaining vertical space of the viewport with blank lines
+            for (int i = drawnLines; i < VIEWPORT_HEIGHT; i++)
+            {
+                Console.WriteLine(new string(' ', VIEWPORT_WIDTH));
+            }
         }
 
         private void RenderEndScreen()
         {
-            Console.Clear();
+            Console.Clear(); // It is okay to clear once at the end
             if (gameLoop.HasWon)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
