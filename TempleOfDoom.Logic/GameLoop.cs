@@ -53,6 +53,30 @@ namespace TempleOfDoom.Logic
             {
                 observer.OnGameTick();
             }
+
+            if (level.CurrentRoom != null)
+            {
+                foreach (var enemy in level.CurrentRoom.Enemies)
+                {
+                    enemy.OnGameTick();
+                }
+                CheckEnemyCollisions(level.Player);
+            }
+        }
+
+        private void CheckEnemyCollisions(Player player)
+        {
+            if (level.CurrentRoom == null) return;
+            
+            var hittingEnemy = level.CurrentRoom.Enemies.Find(e => e.X == player.X && e.Y == player.Y);
+            if (hittingEnemy != null)
+            {
+                player.Lives--;
+                if (player.Lives <= 0)
+                {
+                    IsGameOver = true;
+                }
+            }
         }
 
         public void HandleInput(ConsoleKey key)
@@ -78,20 +102,25 @@ namespace TempleOfDoom.Logic
 
         private void ProcessMove(Player player, int targetX, int targetY)
         {
-            if (targetX >= 0 && targetX < level.CurrentRoom.Width &&
-                targetY >= 0 && targetY < level.CurrentRoom.Height)
+            var room = level.CurrentRoom;
+            if (room == null) return;
+
+            if (targetX >= 0 && targetX < room.Width &&
+                targetY >= 0 && targetY < room.Height)
             {
-                var targetTile = level.CurrentRoom.GetTile(targetX, targetY);
-                if (targetTile.IsWalkable(player))
+                var targetTile = room.GetTile(targetX, targetY);
+                if (targetTile != null && targetTile.IsWalkable(player))
                 {
                     player.X = targetX;
                     player.Y = targetY;
 
                     targetTile.Interact(player);
+                    
+                    CheckEnemyCollisions(player);
 
                     CheckRoomSwitch(level, player);
 
-                    var currentTile = level.CurrentRoom.GetTile(player.X, player.Y);
+                    var currentTile = room.GetTile(player.X, player.Y);
                     if (currentTile is ConveyorBeltTile conveyor)
                     {
                         int slideX = player.X;
@@ -101,11 +130,11 @@ namespace TempleOfDoom.Logic
                         slideX += vector.x;
                         slideY += vector.y;
                         
-                        if (slideX >= 0 && slideX < level.CurrentRoom.Width &&
-                            slideY >= 0 && slideY < level.CurrentRoom.Height)
+                        if (slideX >= 0 && slideX < room.Width &&
+                            slideY >= 0 && slideY < room.Height)
                         {
-                            var slideTile = level.CurrentRoom.GetTile(slideX, slideY);
-                            if (slideTile.IsWalkable(player))
+                            var slideTile = room.GetTile(slideX, slideY);
+                            if (slideTile != null && slideTile.IsWalkable(player))
                             {
                                 player.X = slideX;
                                 player.Y = slideY;
