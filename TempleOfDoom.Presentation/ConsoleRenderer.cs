@@ -34,6 +34,7 @@ namespace TempleOfDoom.Presentation
         private void RenderHUD()
         {
             var p = level.Player;
+            if (p == null) return;
             Console.WriteLine(new string('=', 50));
             Console.WriteLine($" LIVES: {p.Lives}  |  STONES: {p.StonesCollected}/{level.TotalStones}  |  TIME: {gameLoop.ElapsedTime:mm\\:ss}");
             Console.WriteLine($" KEYS: {p.GetKeyList()}");
@@ -52,7 +53,7 @@ namespace TempleOfDoom.Presentation
                 Console.Write("#"); // Left Wall
                 for (int x = 0; x < room.Width; x++)
                 {
-                   if (level.Player.CurrentRoomId == room.Id && level.Player.X == x && level.Player.Y == y)
+                   if (level.Player != null && level.Player.CurrentRoomId == room.Id && level.Player.X == x && level.Player.Y == y)
                    {
                        Console.ForegroundColor = ConsoleColor.Cyan;
                        Console.Write('@');

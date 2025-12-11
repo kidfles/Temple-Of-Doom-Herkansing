@@ -18,7 +18,7 @@ namespace TempleOfDoom.Core
             }
             return false; 
         }
-        public virtual bool IsWalkable(Player player)
+        public virtual bool IsWalkable(Player? player)
         {
              return true; 
         }

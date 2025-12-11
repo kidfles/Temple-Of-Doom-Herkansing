@@ -17,7 +17,7 @@ namespace TempleOfDoom.Core.Doors
             hasClosed = true;
         }
 
-        public override bool CanEnter(Player player)
+        public override bool CanEnter(Player? player)
         {
             if (hasClosed) return false;
             return base.CanEnter(player);

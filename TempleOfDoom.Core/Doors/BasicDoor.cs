@@ -15,7 +15,7 @@ namespace TempleOfDoom.Core.Doors
             //basicdoor does nothing, but this function 
         }
 
-        public bool CanEnter(Player player)
+        public bool CanEnter(Player? player)
         {
             return IsOpen;
         }

@@ -15,7 +15,7 @@ namespace TempleOfDoom.Core.Doors
             wrappedDoor.Interact(player);
         }
 
-        public virtual bool CanEnter(Player player)
+        public virtual bool CanEnter(Player? player)
         {
             return wrappedDoor.CanEnter(player);
         }

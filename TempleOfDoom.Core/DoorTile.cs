@@ -28,7 +28,7 @@ namespace TempleOfDoom.Core
              return false;
         }
 
-        public override bool IsWalkable(Player player)
+        public override bool IsWalkable(Player? player)
         {
             return _doorLogic.CanEnter(player);
         }

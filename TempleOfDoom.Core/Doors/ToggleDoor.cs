@@ -9,7 +9,7 @@ namespace TempleOfDoom.Core.Doors
         {
         }
 
-        public override bool CanEnter(Player player)
+        public override bool CanEnter(Player? player)
         {
             
             return base.CanEnter(player);
