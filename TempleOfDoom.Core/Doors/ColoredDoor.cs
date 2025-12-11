@@ -12,6 +12,7 @@ namespace TempleOfDoom.Core.Doors
 
         public override bool CanEnter(Player player)
         {
+            if (player == null) return false;
             if (player.HasKey(requiredColor))
             {
                 return base.CanEnter(player);
