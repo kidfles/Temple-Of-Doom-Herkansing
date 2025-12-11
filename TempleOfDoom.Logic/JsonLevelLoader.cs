@@ -94,6 +94,29 @@ namespace TempleOfDoom.Logic
                     }
                 }
 
+                // 3.5 Load Enemies
+                if (roomDto.Enemies != null)
+                {
+                    foreach (var enemyDto in roomDto.Enemies)
+                    {
+                        CODE_TempleOfDoom_DownloadableContent.Enemy? dllEnemy = null;
+                        if (enemyDto.Type == "horizontal")
+                        {
+                            dllEnemy = new CODE_TempleOfDoom_DownloadableContent.HorizontallyMovingEnemy(1, enemyDto.X, enemyDto.Y, enemyDto.MinX, enemyDto.MaxX);
+                        }
+                        else if (enemyDto.Type == "vertical")
+                        {
+                            dllEnemy = new CODE_TempleOfDoom_DownloadableContent.VerticallyMovingEnemy(1, enemyDto.X, enemyDto.Y, enemyDto.MinY, enemyDto.MaxY);
+                        }
+
+                        if (dllEnemy != null)
+                        {
+                            var adapter = new TempleOfDoom.Logic.Enemies.EnemyAdapter(dllEnemy);
+                            room.Enemies.Add(adapter);
+                        }
+                    }
+                }
+
                 level.Rooms.Add(room);
             }
 

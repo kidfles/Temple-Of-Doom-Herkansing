@@ -60,14 +60,24 @@ namespace TempleOfDoom.Presentation
                    }
                    else
                    {
-                       IGameObject tile = room.GetTile(x, y);
-                       if (tile != null)
+                       var enemy = room.Enemies.Find(e => e.X == x && e.Y == y);
+                       if (enemy != null)
                        {
-                           Console.Write(tile.GetSprite());
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write('E');
+                            Console.ResetColor();
                        }
                        else
                        {
-                           Console.Write(' ');
+                           IGameObject? tile = room.GetTile(x, y);
+                           if (tile != null)
+                           {
+                               Console.Write(tile.GetSprite());
+                           }
+                           else
+                           {
+                               Console.Write(' ');
+                           }
                        }
                    }
                 }

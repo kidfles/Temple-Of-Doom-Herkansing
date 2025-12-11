@@ -13,8 +13,12 @@ namespace TempleOfDoom.Core
             Id = id;
             Width = width;
             Height = height;
+            Height = height;
             tiles = new IGameObject[width, height];
+            Enemies = new List<IEnemy>();
         }
+
+        public List<IEnemy> Enemies { get; set; }
 
         public IGameObject? GetTile(int x, int y)
         {
