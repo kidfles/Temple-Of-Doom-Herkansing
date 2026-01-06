@@ -5,16 +5,20 @@ using TempleOfDoom.Core.Doors;
 
 namespace TempleOfDoom.Logic
 {
+    // Factory Pattern: De centrale plek waar we tegels maken.
+    // Dit zorgt ervoor dat de rest van de code niet hoeft te weten HOE je precies een tegel of deur maakt.
     public class TileFactory
     {
         public Tile CreateTile(string type)
         {
             switch (type.ToLower())
             {
+                // Gewone tegels.
                 case TileTypes.Floor:
                     return new FloorTile();
                 case TileTypes.Wall:
                     return new WallTile();
+                // Module B: Hier maken we de lopende band aan.
                 case TileTypes.ConveyorBelt:
                     return new ConveyorBeltTile();
                 default:
@@ -22,13 +26,15 @@ namespace TempleOfDoom.Logic
                 }
         }
 
+        // Decorator Pattern: Hier bouwen we de 'ui' van decorators om de deur heen.
         public IDoor CreateDoorLogic(DoorDto[] doorDtos)
         {
-            IDoor door = new BasicDoor();
+            IDoor door = new BasicDoor(); // Begin altijd met een simpele deur.
             if (doorDtos != null)
             {
                 foreach (var doorDto in doorDtos)
                 {
+                    // Wrap de deur in extra functionaliteit (Decorators).
                     switch (doorDto.Type?.ToLower())
                     {
                         case TileTypes.Colored:
@@ -48,6 +54,7 @@ namespace TempleOfDoom.Logic
 
         public Tile CreateDoorTile(IDoor doorLogic, int targetRoomId, int targetX, int targetY)
         {
+            // Stop de (mogelijk versierde) deur-logica in de tegel.
             var tile = new DoorTile(doorLogic)
             {
                 TargetRoomId = targetRoomId,

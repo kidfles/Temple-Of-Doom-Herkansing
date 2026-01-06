@@ -4,6 +4,8 @@ using CODE_TempleOfDoom_DownloadableContent;
 
 namespace TempleOfDoom.Logic.Enemies
 {
+    // Adapter Pattern: De DLL verwacht een 'IField', maar wij hebben 'Room'.
+    // Deze klasse vertaalt onze Room naar iets wat de DLL vijand begrijpt.
     public class RoomAdapter : IField
     {
         private Room _room;
@@ -17,12 +19,13 @@ namespace TempleOfDoom.Logic.Enemies
             _y = y;
         }
 
+        // De DLL vraagt om de buurman. Wij zoeken die in ons grid.
         public IField? GetNeighbour(int direction)
         {
             int targetX = _x;
             int targetY = _y;
 
-            // Mapping: 0=North, 1=East, 2=South, 3=West
+            // Mapping: 0=Noord, 1=Oost, 2=Zuid, 3=West
             switch (direction)
             {
                 case 0: targetY--; break;
@@ -41,6 +44,7 @@ namespace TempleOfDoom.Logic.Enemies
             return null;
         }
 
+        // Kan de vijand hier staan? Wij checken 'IsWalkable'.
         public bool CanEnter
         {
             get

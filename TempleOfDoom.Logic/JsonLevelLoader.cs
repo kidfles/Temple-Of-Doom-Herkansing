@@ -7,6 +7,7 @@ using TempleOfDoom.Core.Doors;
 
 namespace TempleOfDoom.Logic
 {
+    // Verantwoordelijk voor het inlezen van de JSON en het maken van het Level object.
     public class JsonLevelLoader : ILevelLoader
     {
         public Level LoadLevel(string path)
@@ -19,11 +20,13 @@ namespace TempleOfDoom.Logic
             string jsonContent = File.ReadAllText(path);
             LevelDto? levelDto = JsonSerializer.Deserialize<LevelDto>(jsonContent);
 
+                // Check of de JSON geldig is.
             if (levelDto == null || levelDto.Rooms == null)
             {
                 throw new Exception("Failed to load level: JSON content is invalid or empty.");
             }
 
+            // Setup van patterns (Factory).
             Level level = new Level();
             TileFactory tileFactory = new TileFactory();
 
@@ -31,7 +34,7 @@ namespace TempleOfDoom.Logic
             {
                 Room room = new Room(roomDto.Id, roomDto.Width, roomDto.Height);
 
-                // Default fill with floor
+                // Vul de kamer standaard helemaal met vloertegels.
                 for (int x = 0; x < roomDto.Width; x++)
                 {
                     for (int y = 0; y < roomDto.Height; y++)
@@ -44,9 +47,11 @@ namespace TempleOfDoom.Logic
                 {
                     foreach (var specialTile in roomDto.SpecialFloorTiles)
                     {
-                        if (specialTile.Type == null) continue; // Skip invalid data
+                        if (specialTile.Type == null) continue;
 
                         Tile tile = tileFactory.CreateTile(specialTile.Type);
+                        
+                        // Module B: Extra logica voor lopende banden (richting instellen).
                         if (tile is ConveyorBeltTile conveyor && specialTile.Direction != null)
                         {
                             if (Enum.TryParse<Direction>(specialTile.Direction, true, out var dir))
@@ -58,7 +63,7 @@ namespace TempleOfDoom.Logic
                     }
                 }
 
-                // 3. Safe Array Iteration (Items)
+                // Items inladen (Sankara Stones, Sleutels, etc.).
                 if (roomDto.Items != null)
                 {
                     foreach (var itemDto in roomDto.Items)
@@ -83,6 +88,7 @@ namespace TempleOfDoom.Logic
                                 break;
                         }
 
+                        // Stop het item in de tegel.
                         if (item != null)
                         {
                             var tile = room.GetTile(itemDto.X, itemDto.Y) as Tile;
@@ -94,7 +100,7 @@ namespace TempleOfDoom.Logic
                     }
                 }
 
-                // 3.5 Load Enemies
+                // Vijanden inladen (Hier gebruiken we straks adapters).
                 if (roomDto.Enemies != null)
                 {
                     foreach (var enemyDto in roomDto.Enemies)
@@ -111,8 +117,10 @@ namespace TempleOfDoom.Logic
 
                         if (dllEnemy != null)
                         {
+                            // Adapter Pattern: We stoppen de Room wrapper (adapter) in de DLL vijand...
                             dllEnemy.CurrentField = new TempleOfDoom.Logic.Enemies.RoomAdapter(room, enemyDto.X, enemyDto.Y);
                             
+                            // ...en we wrappen de DLL vijand in onze eigen interface.
                             var adapter = new TempleOfDoom.Logic.Enemies.EnemyAdapter(dllEnemy);
                             room.Enemies.Add(adapter);
                         }
@@ -122,24 +130,25 @@ namespace TempleOfDoom.Logic
                 level.Rooms.Add(room);
             }
 
-            // 4. Safe Array Iteration (Connections)
+            // Connecties verwerken: Portalen en Deuren.
             if (levelDto.Connections != null)
             {
                 foreach (var connection in levelDto.Connections)
                 {
-                    // Portals
+                    // Module B: Portalen (Teleportatie tussen kamers).
                     if (connection.Portals != null && connection.Portals.Length == 2)
                     {
                         var portal1 = connection.Portals[0];
                         var portal2 = connection.Portals[1];
 
-                        // Create two linked tiles
+                        // Module B: Portalen koppelen kamers aan elkaar.
+                        // Maak twee tegels die aan elkaar gelinkt zijn.
                         PortalTile tile1 = new PortalTile
                         {
                             TargetRoomId = portal2.RoomId,
                             TargetX = portal2.X,
                             TargetY = portal2.Y
-                        };
+                        }; // ... (logica voor portal 2)
 
                         PortalTile tile2 = new PortalTile
                         {
@@ -148,7 +157,7 @@ namespace TempleOfDoom.Logic
                             TargetY = portal1.Y
                         };
 
-                        // Assign to rooms (safely)
+                        // Koppel de tegels aan de kamers (veilig checken of kamer bestaat).
                         var room1 = level.Rooms.Find(r => r.Id == portal1.RoomId);
                         if (room1 != null) room1.SetTile(portal1.X, portal1.Y, tile1);
 
@@ -156,9 +165,10 @@ namespace TempleOfDoom.Logic
                         if (room2 != null) room2.SetTile(portal2.X, portal2.Y, tile2);
                     }
 
-                    // Doors
+                    // Deuren (Decorator Pattern wordt hier via de Factory toegepast).
                     if (connection.Doors != null)
                     {
+                        // Factory Pattern: Maak de complexe deur-logica aan.
                         IDoor sharedDoorLogic = tileFactory.CreateDoorLogic(connection.Doors);
 
                         if (connection.North.HasValue && connection.South.HasValue)
@@ -168,6 +178,7 @@ namespace TempleOfDoom.Logic
                             var r1 = level.Rooms.Find(r => r.Id == r1Id);
                             var r2 = level.Rooms.Find(r => r.Id == r2Id);
 
+                            // Deuren tussen Noord en Zuid.
                             if (r1 != null && r2 != null)
                             {
                                 int x1 = r1.Width / 2;
@@ -175,6 +186,7 @@ namespace TempleOfDoom.Logic
                                 int x2 = r2.Width / 2;
                                 int y2 = 0;
 
+                                // Deur in kamer 1 en kamer 2 zetten.
                                 r1.SetTile(x1, y1, tileFactory.CreateDoorTile(sharedDoorLogic, r2Id, x2, y2));
                                 r2.SetTile(x2, y2, tileFactory.CreateDoorTile(sharedDoorLogic, r1Id, x1, y1));
                             }
@@ -186,6 +198,7 @@ namespace TempleOfDoom.Logic
                             var r1 = level.Rooms.Find(r => r.Id == r1Id);
                             var r2 = level.Rooms.Find(r => r.Id == r2Id);
 
+                            // Deuren tussen West en Oost.
                             if (r1 != null && r2 != null)
                             {
                                 int x1 = r1.Width - 1;
@@ -201,7 +214,7 @@ namespace TempleOfDoom.Logic
                 }
             }
 
-            // 5. Player Initialization
+            // Speler aanmaken en startpositie instellen.
             if (levelDto.Player != null)
             {
                 level.Player = new Player
@@ -215,7 +228,7 @@ namespace TempleOfDoom.Logic
                 level.CurrentRoom = level.Rooms.Find(r => r.Id == level.Player.CurrentRoomId);
             }
             
-            // 6. Final safety check
+            // Laatste check: hebben we een startkamer?
             if (level.CurrentRoom == null && level.Rooms.Count > 0)
             {
                 level.CurrentRoom = level.Rooms[0];
