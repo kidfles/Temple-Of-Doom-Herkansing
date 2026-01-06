@@ -1,12 +1,14 @@
 
 namespace TempleOfDoom.Core
 {
+    // Module B: Een lopende band die de speler automatisch verplaatst.
     public class ConveyorBeltTile : Tile
     {
         public Direction Direction { get; set; }
 
         public override bool Interact(Player player)
         {
+            // Eerst kijken of er item interactie is.
             return base.Interact(player);
         }
 
@@ -20,6 +22,7 @@ namespace TempleOfDoom.Core
             return 'C'; 
         }
 
+        // Module B: Berekenen in welke richting we de speler duwen.
         public (int x, int y) GetTransportVector()
         {
             return Direction switch
