@@ -1,9 +1,9 @@
 
 namespace TempleOfDoom.Core.Doors
 {
+    // Decorator Pattern: Deze deur gaat steeds open en dicht (toggle).
     public class ToggleDoor : DoorDecorator
     {
-        //For now 0 logic, but that will come
 
         public ToggleDoor(IDoor door) : base(door)
         {
