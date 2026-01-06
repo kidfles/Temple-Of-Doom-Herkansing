@@ -4,12 +4,13 @@ using TempleOfDoom.Logic;
 
 namespace TempleOfDoom.Presentation
 {
+    // Observer Pattern: Dit is de view, die luistert naar updates van de GameLoop.
     public class ConsoleRenderer : IGameObserver
     {
         private Level level;
         private GameLoop gameLoop;
         
-        // Define a fixed viewport size to ensure we always clear enough space
+        // Vaste grootte van het scherm zodat we geen flikkering krijgen.
         private const int VIEWPORT_HEIGHT = 20; 
         private const int VIEWPORT_WIDTH = 60;
 
@@ -20,9 +21,10 @@ namespace TempleOfDoom.Presentation
             Console.CursorVisible = false;
         }
 
+        // Observer Pattern: Deze functie wordt aangeroepen door de GameLoop bij elke tick.
         public void OnGameTick()
         {
-            Console.SetCursorPosition(0, 0);
+            Console.SetCursorPosition(0, 0); // Begin linksboven met tekenen.
             
             if (gameLoop.IsGameOver)
             {
@@ -30,8 +32,8 @@ namespace TempleOfDoom.Presentation
             }
             else if (level.CurrentRoom != null)
             {
-                RenderHUD();
-                RenderRoom(level.CurrentRoom);
+                RenderHUD(); // Teken scores en levens.
+                RenderRoom(level.CurrentRoom); // Teken de kamer zelf.
             }
         }
 

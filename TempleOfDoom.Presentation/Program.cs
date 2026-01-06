@@ -10,8 +10,8 @@ namespace TempleOfDoom
     {
         static void Main(string[] args)
         {
+            // Composition Root: Hier start de applicatie en knopen we alles aan elkaar.
             string levelFile = "TempleOfDoom_Extended_B_2122.json";
-            //jippie
 
             if (!File.Exists(levelFile))
             {
@@ -51,11 +51,14 @@ namespace TempleOfDoom
                  level.CurrentRoom = level.Rooms[0];
             }
 
+            // Setup Dependency Injection (handmatig).
             GameLoop gameLoop = new GameLoop(level);
             ConsoleRenderer renderer = new ConsoleRenderer(level, gameLoop);
+            
+            // Observer Pattern: Koppel de renderer aan de game loop.
             gameLoop.RegisterObserver(renderer);
 
-            // Initial Draw
+            // Teken het scherm voor de eerste keer.
             gameLoop.TriggerGameTick();
 
             bool running = true;
