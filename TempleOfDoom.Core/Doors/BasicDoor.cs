@@ -1,18 +1,19 @@
 
 namespace TempleOfDoom.Core.Doors
 {
+    // De simpelste vorm van een deur. 'Component' in het Decorator Pattern.
     public class BasicDoor : IDoor
     {
         public bool IsOpen { get; private set; }
 
         public BasicDoor()
         {
-            IsOpen = true; // Default to open
+            IsOpen = true; // Standaard open.
         }
 
         public void Interact(Player player)
         {
-            //basicdoor does nothing, but this function 
+            // Een gewone deur doet niks speciaals bij interactie (hij is gewoon open).
         }
 
         public bool CanEnter(Player? player)

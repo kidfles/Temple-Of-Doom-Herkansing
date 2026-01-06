@@ -1,6 +1,7 @@
 
 namespace TempleOfDoom.Core.Doors
 {
+    // Decorator Pattern: Checkt of de speler de juiste sleutel heeft vóórdat we de wrapped deur vragen.
     public class ColoredDoor : DoorDecorator
     {
         private string requiredColor;
