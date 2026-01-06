@@ -41,31 +41,32 @@ namespace TempleOfDoom.Presentation
         {
             var p = level.Player;
             if (p == null) return;
-            // PadRight ensures the string overrides old text if numbers shrink
+            // PadRight zorgt ervoor dat oude tekst wordt overschreven als de cijfers krimpen (voorkomt gekke visuals).
             Console.WriteLine(new string('=', VIEWPORT_WIDTH));
             Console.WriteLine($" LIVES: {p.Lives}  |  STONES: {p.StonesCollected}/{level.TotalStones}  |  TIME: {gameLoop.ElapsedTime:mm\\:ss}".PadRight(VIEWPORT_WIDTH));
             Console.WriteLine($" KEYS: {p.GetKeyList()}".PadRight(VIEWPORT_WIDTH));
             Console.WriteLine(new string('=', VIEWPORT_WIDTH));
         }
 
+        // Teken de hele kamer regel voor regel.
         private void RenderRoom(Room room)
         {
             int drawnLines = 0;
 
-            // 1. Top Wall
+            // 1. Bovenmuur tekenen
             Console.Write("#"); 
             for (int i = 0; i < room.Width; i++) Console.Write("#");
-            // Fill the rest of the line with space to erase old ghost walls
+            // Vul de rest van de regel met spaties om oude 'ghost' muren weg te poetsen.
             Console.WriteLine("#".PadRight(VIEWPORT_WIDTH - room.Width - 1)); 
             drawnLines++;
 
-            // 2. Room Content
+            // 2. Inhoud van de kamer
             for (int y = 0; y < room.Height; y++)
             {
-                Console.Write("#"); // Left Wall
+                Console.Write("#"); // Linkermuur
                 for (int x = 0; x < room.Width; x++)
                 {
-                    // Draw Player
+                    // Teken de Speler (heeft prioriteit)
                     if (level.Player != null && level.Player.CurrentRoomId == room.Id && level.Player.X == x && level.Player.Y == y)
                     {
                         Console.ForegroundColor = ConsoleColor.Cyan;
@@ -74,7 +75,7 @@ namespace TempleOfDoom.Presentation
                     }
                     else
                     {
-                        // Draw Enemies
+                        // Teken Vijanden (hebben prioriteit boven tegels)
                         var enemy = room.Enemies.Find(e => e.X == x && e.Y == y);
                         if (enemy != null)
                         {
@@ -84,48 +85,49 @@ namespace TempleOfDoom.Presentation
                         }
                         else
                         {
-                            // Draw Tiles/Items
+                            // Teken Tegels/Items (als er niks anders staat)
                             IGameObject? tile = room.GetTile(x, y);
                             char sprite = tile != null ? tile.GetSprite() : ' ';
                             Console.Write(sprite);
                         }
                     }
                 }
-                // Right Wall + Clear remaining line width
+                // Rechtermuur + de rest van de regel schoonvegen.
                 Console.WriteLine("#".PadRight(VIEWPORT_WIDTH - room.Width - 1));
                 drawnLines++;
             }
 
-            // 3. Bottom Wall
+            // 3. Ondermuur tekenen
             Console.Write("#");
             for (int i = 0; i < room.Width; i++) Console.Write("#");
             Console.WriteLine("#".PadRight(VIEWPORT_WIDTH - room.Width - 1));
             drawnLines++;
             
-            // 4. Aggressive Clearing (The Anti-Ghosting Fix)
-            // Fill the remaining vertical space of the viewport with blank lines
+            // 4. Agressief Schoonmaken (Anti-Ghosting Fix)
+            // Vul alle resterende regels van de viewport met lege regels zodat we geen oude troep zien.
             for (int i = drawnLines; i < VIEWPORT_HEIGHT; i++)
             {
                 Console.WriteLine(new string(' ', VIEWPORT_WIDTH));
             }
         }
 
+        // Als het spel klaar is (gewonnen of verloren), tekenen we dit schermpje.
         private void RenderEndScreen()
         {
-            Console.Clear(); // It is okay to clear once at the end
+            Console.Clear(); // Hier mag een clear wel, want het scherm verandert toch niet meer constant.
             if (gameLoop.HasWon)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("\n\n   VICTORY! You have collected all stones!\n");
+                Console.WriteLine("\n\n   VICTORY! Je hebt alle stenen gevonden!\n");
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\n\n   GAME OVER! You have died.\n");
+                Console.WriteLine("\n\n   GAME OVER! Je bent dood.\n");
             }
             Console.ResetColor();
-            Console.WriteLine($"   Final Time: {gameLoop.ElapsedTime:mm\\:ss}");
-            Console.WriteLine("   Press ESC to exit.");
+            Console.WriteLine($"   Eindtijd: {gameLoop.ElapsedTime:mm\\:ss}");
+            Console.WriteLine("   Druk op ESC om af te sluiten.");
         }
     }
 }
