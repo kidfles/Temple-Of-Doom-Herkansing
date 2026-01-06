@@ -3,6 +3,8 @@ using System.Text.Json.Serialization;
 
 namespace TempleOfDoom.Core.DTOs
 {
+    // DTO (Data Transfer Object): Deze klassen zijn PUUR voor het inlezen van de JSON file.
+    // Hier zit GEEN logica in, alleen data structuren die matchen met de JSON.
     public class LevelDto
     {
         [JsonPropertyName("rooms")]
@@ -72,6 +74,7 @@ namespace TempleOfDoom.Core.DTOs
         public string? Color { get; set; }
     }
 
+    // Module B: Specifieke data voor Module B tegels (zoals conveyor belts).
     public class SpecialTileDto
     {
         [JsonPropertyName("type")]
@@ -111,6 +114,7 @@ namespace TempleOfDoom.Core.DTOs
         public int MaxY { get; set; }
     }
 
+    // Module B: Module B portals en deuren.
     public class ConnectionDto
     {
         [JsonPropertyName("NORTH")]
