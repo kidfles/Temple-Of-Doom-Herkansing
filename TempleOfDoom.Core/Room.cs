@@ -1,11 +1,14 @@
 
 namespace TempleOfDoom.Core
 {
+    // Een kamer in de tempel. Bestaat uit een grid van tegels.
     public class Room
     {
         public int Id { get; private set; }
         public int Width { get; private set; }
         public int Height { get; private set; }
+        
+        // Het grid met alle tegels.
         private IGameObject[,] tiles;
 
         public Room(int id, int width, int height)
@@ -20,6 +23,7 @@ namespace TempleOfDoom.Core
 
         public List<IEnemy> Enemies { get; set; }
 
+        // Vraag veilig een tegel op.
         public IGameObject? GetTile(int x, int y)
         {
             if (IsValidCoordinate(x, y))
