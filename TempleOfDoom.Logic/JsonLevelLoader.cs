@@ -100,7 +100,7 @@ namespace TempleOfDoom.Logic
                     }
                 }
 
-                // Vijanden inladen (Hier gebruiken we straks adapters).
+                // Vijanden inladen
                 if (roomDto.Enemies != null)
                 {
                     foreach (var enemyDto in roomDto.Enemies)
@@ -120,7 +120,7 @@ namespace TempleOfDoom.Logic
                             // Adapter Pattern: We stoppen de Room wrapper (adapter) in de DLL vijand...
                             dllEnemy.CurrentField = new TempleOfDoom.Logic.Enemies.RoomAdapter(room, enemyDto.X, enemyDto.Y);
                             
-                            // ...en we wrappen de DLL vijand in onze eigen interface.
+                            // en we wrappen de DLL vijand in onze eigen interface.
                             var adapter = new TempleOfDoom.Logic.Enemies.EnemyAdapter(dllEnemy);
                             room.Enemies.Add(adapter);
                         }
